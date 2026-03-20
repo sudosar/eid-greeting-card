@@ -112,7 +112,7 @@ async function generateOgImage(name?: string): Promise<Buffer> {
       ]);
     }
 
-    return await image.png().toBuffer();
+    return await image.jpeg({ quality: 80, mozjpeg: true }).toBuffer();
   } catch (error) {
     console.error("[OG Image] Generation failed:", error);
 
@@ -132,7 +132,7 @@ async function generateOgImage(name?: string): Promise<Buffer> {
   ${name ? `<text x="${WIDTH / 2}" y="${HEIGHT / 2 + 100}" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#F0C75E">${escapeXml(name.trim())}</text>` : ""}
 </svg>`;
 
-    return await sharp(Buffer.from(fallbackSvg)).png().toBuffer();
+    return await sharp(Buffer.from(fallbackSvg)).jpeg({ quality: 80, mozjpeg: true }).toBuffer();
   }
 }
 
@@ -143,7 +143,7 @@ export function registerOgImageRoute(app: Express) {
       const imageBuffer = await generateOgImage(name);
 
       res.set({
-        "Content-Type": "image/png",
+        "Content-Type": "image/jpeg",
         "Cache-Control": "public, max-age=86400, s-maxage=86400",
         "Content-Length": imageBuffer.length.toString(),
       });
