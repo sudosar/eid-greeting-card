@@ -22,3 +22,4 @@
 - [x] Tappable lanterns that light up/glow when clicked
 - [x] Interactive environment elements (tap stars, sparkle bursts, etc.)
 - [x] Fix audio not auto-playing on first environment interaction
+- [x] Replace ambient audio with Eid-flavored instrumental track (Middle Eastern melodic elements)

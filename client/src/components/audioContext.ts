@@ -7,7 +7,7 @@
  */
 
 const AUDIO_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-ambient_280f4337.mp3";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-ambient-v2_6f17c4ff.mp3";
 
 let audio: HTMLAudioElement | null = null;
 let hasPlayed = false;
