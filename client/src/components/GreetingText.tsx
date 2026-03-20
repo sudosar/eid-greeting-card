@@ -4,11 +4,25 @@
  * Arabic: Scheherazade New — flowing, elegant Naskh
  * English: Cinzel Decorative — ornate capitals echoing architectural inscriptions
  * Body: EB Garamond — warm, classical serif
+ *
+ * PERSONALIZATION: Reads ?name= from URL to display a personalized greeting
+ * e.g. ?name=Ahmed → "Dear Ahmed," / "عزيزي أحمد"
  */
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 
+function usePersonName(): string | null {
+  return useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name");
+    return name ? decodeURIComponent(name).trim() : null;
+  }, []);
+}
+
 export function GreetingText() {
+  const name = usePersonName();
+
   return (
     <div className="relative z-30 flex flex-col items-center justify-center text-center px-6 py-8">
       {/* Decorative top divider */}
@@ -21,6 +35,22 @@ export function GreetingText() {
           background: "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
         }}
       />
+
+      {/* Personalized "Dear Name" line — only shown when ?name= is present */}
+      {name && (
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+          className="font-body text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3"
+          style={{
+            color: "rgba(232, 220, 200, 0.85)",
+            letterSpacing: "0.04em",
+          }}
+        >
+          Dear <span style={{ color: "#F0C75E", fontWeight: 600 }}>{name}</span>,
+        </motion.p>
+      )}
 
       {/* Arabic greeting — عيد مبارك */}
       <motion.h1
@@ -66,7 +96,7 @@ export function GreetingText() {
         Eid Mubarak
       </motion.h2>
 
-      {/* Subtitle / blessing */}
+      {/* Subtitle / blessing — personalized when name is present */}
       <motion.p
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -76,7 +106,9 @@ export function GreetingText() {
           color: "rgba(232, 220, 200, 0.75)",
         }}
       >
-        May this blessed occasion bring peace, happiness, and prosperity to you and your loved ones
+        {name
+          ? `May this blessed occasion bring peace, happiness, and prosperity to you and your family, ${name}`
+          : "May this blessed occasion bring peace, happiness, and prosperity to you and your loved ones"}
       </motion.p>
 
       {/* Arabic blessing */}
