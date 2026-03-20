@@ -1,13 +1,14 @@
 /*
  * DESIGN: "Lantern Procession" — Atmospheric Depth & Light
  * Home: Full-screen immersive Eid greeting card
- * Layers: Background sky → Stars → Mosque silhouette → Bokeh → Lanterns → Arch → Text
+ * Layers: Background sky → Stars → Mosque silhouette → Bokeh → Interactive Sky → Lanterns → Arch → Text
  * Features: Share button (bottom-right), Audio player (bottom-left)
+ * INTERACTIVE: Tap lanterns to light them, tap sky for sparkle bursts, audio auto-plays on first tap
  */
 
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BokehParticles, TwinklingStars, FloatingLightParticles } from "@/components/Particles";
+import { BokehParticles, TwinklingStars, FloatingLightParticles, InteractiveSkyLayer } from "@/components/Particles";
 import { LanternScene } from "@/components/Lanterns";
 import { GreetingText } from "@/components/GreetingText";
 import { GeometricCorners, TopBorderLine, BottomBorderLine } from "@/components/GeometricBorder";
@@ -72,8 +73,19 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         Preparing your greeting
       </motion.p>
 
+      {/* Tap to begin hint */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.6, 0] }}
+        transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
+        className="font-body text-xs tracking-widest mt-6"
+        style={{ color: "rgba(240, 199, 94, 0.4)" }}
+      >
+        tap anywhere to begin
+      </motion.p>
+
       {/* Progress bar */}
-      <div className="w-48 h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: "rgba(240, 199, 94, 0.1)" }}>
+      <div className="w-48 h-[2px] rounded-full overflow-hidden mt-4" style={{ backgroundColor: "rgba(240, 199, 94, 0.1)" }}>
         <motion.div
           className="h-full rounded-full"
           style={{
@@ -148,10 +160,13 @@ export default function Home() {
           {/* Layer 4: Floating light particles rising up */}
           <FloatingLightParticles count={10} />
 
+          {/* Layer 4.5: Interactive sky — tap for sparkle bursts (z-14 so lanterns at z-15/z-20 receive clicks) */}
+          <InteractiveSkyLayer />
+
           {/* Layer 5: Arch frame overlay */}
           <ArchFrame />
 
-          {/* Layer 6: Lanterns at various depths */}
+          {/* Layer 6: Lanterns at various depths — tappable to light up */}
           <LanternScene />
 
           {/* Layer 7: Geometric corner ornaments and border lines */}
@@ -160,7 +175,7 @@ export default function Home() {
           <BottomBorderLine />
 
           {/* Layer 8: Central greeting text — vertically centered */}
-          <div className="absolute inset-0 z-30 flex items-center justify-center">
+          <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
             <GreetingText />
           </div>
 

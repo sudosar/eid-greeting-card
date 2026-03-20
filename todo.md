@@ -18,3 +18,6 @@
 - [x] Push code to GitHub repository
 - [x] Fix 404 error when accessing GitHub Pages URL (GitHub Pages incompatible with full-stack app)
 - [x] Deploy to Render web service
+- [x] Auto-play audio on first user interaction (tap anywhere)
+- [x] Tappable lanterns that light up/glow when clicked
+- [x] Interactive environment elements (tap stars, sparkle bursts, etc.)
