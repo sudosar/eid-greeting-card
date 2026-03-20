@@ -10,13 +10,11 @@ import viteConfig from "../../vite.config";
  * Inject dynamic OG meta tags into the HTML template based on query parameters.
  * This enables personalized social media previews when sharing links like ?name=Ahmed
  */
-function injectDynamicOgTags(html: string, url: string): string {
+function injectDynamicOgTags(html: string, url: string, origin?: string): string {
   try {
     const urlObj = new URL(url, "http://localhost");
     const name = urlObj.searchParams.get("name");
     const msg = urlObj.searchParams.get("msg");
-
-    if (!name && !msg) return html;
 
     const decodedName = name ? decodeURIComponent(name).trim() : null;
     const decodedMsg = msg ? decodeURIComponent(msg).trim() : null;
@@ -34,10 +32,11 @@ function injectDynamicOgTags(html: string, url: string): string {
       description += ` ${decodedMsg}`;
     }
 
-    // Build dynamic OG image URL with name parameter
+    // Build absolute OG image URL with name parameter
+    const baseOrigin = origin || "https://eidwishes.onrender.com";
     const ogImagePath = decodedName
-      ? `/api/og-image?name=${encodeURIComponent(decodedName)}`
-      : "/api/og-image";
+      ? `${baseOrigin}/api/og-image?name=${encodeURIComponent(decodedName)}`
+      : `${baseOrigin}/api/og-image`;
 
     // Replace static OG tags with dynamic ones
     html = html.replace(
@@ -52,6 +51,13 @@ function injectDynamicOgTags(html: string, url: string): string {
       /<meta property="og:image" content="[^"]*" \/>/,
       `<meta property="og:image" content="${ogImagePath}" />`
     );
+    // Add og:url for proper canonical sharing
+    if (!html.includes('og:url')) {
+      html = html.replace(
+        /<meta property="og:image" /,
+        `<meta property="og:url" content="${escapeHtml(baseOrigin + url)}" />\n    <meta property="og:image" `
+      );
+    }
     html = html.replace(
       /<meta name="twitter:title" content="[^"]*" \/>/,
       `<meta name="twitter:title" content="${escapeHtml(title)}" />`
@@ -120,8 +126,9 @@ export async function setupVite(app: Express, server: Server) {
       );
       let page = await vite.transformIndexHtml(url, template);
 
-      // Inject dynamic OG tags based on query parameters
-      page = injectDynamicOgTags(page, url);
+      // Inject dynamic OG tags based on query parameters with absolute origin
+      const origin = `${req.protocol}://${req.get("host")}`;
+      page = injectDynamicOgTags(page, url, origin);
 
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
@@ -148,7 +155,8 @@ export function serveStatic(app: Express) {
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
     let html = fs.readFileSync(indexPath, "utf-8");
-    html = injectDynamicOgTags(html, req.originalUrl);
+    const origin = `${req.protocol}://${req.get("host")}`;
+    html = injectDynamicOgTags(html, req.originalUrl, origin);
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
   });
 }

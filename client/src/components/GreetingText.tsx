@@ -32,7 +32,7 @@ export function GreetingText() {
   const { name, msg } = useUrlParams();
 
   return (
-    <div className="relative z-30 flex flex-col items-center justify-center text-center px-4 sm:px-6 py-4 sm:py-8 max-w-full overflow-hidden">
+    <div className="relative z-30 flex flex-col items-center justify-center text-center px-4 sm:px-6 py-4 sm:py-8 max-w-full overflow-hidden" style={{ marginTop: '-8vh' }}>
       {/* Decorative top divider */}
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
@@ -70,6 +70,7 @@ export function GreetingText() {
           color: "#F0C75E",
           direction: "rtl",
           fontWeight: 700,
+          textShadow: "0 2px 12px rgba(12, 20, 69, 0.9), 0 0 30px rgba(12, 20, 69, 0.7)",
         }}
       >
         عيد مبارك

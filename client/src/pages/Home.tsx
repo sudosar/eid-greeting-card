@@ -1,9 +1,9 @@
 /*
  * DESIGN: "Lantern Procession" — Atmospheric Depth & Light
  * Home: Full-screen immersive Eid greeting card
- * Layers: Background sky → Stars → Mosque silhouette → Bokeh → Interactive Sky → Lanterns → Arch → Text
+ * Layers: Background sky → Stars → Mosque silhouette → Interactive Moon → Interactive Minarets → Bokeh → Interactive Sky → Lanterns → Arch → Text
  * Features: Share button (bottom-right), Audio player (bottom-left)
- * INTERACTIVE: Tap lanterns to light them, tap sky for sparkle bursts, audio auto-plays on first tap
+ * INTERACTIVE: Tap lanterns to light them, tap sky for sparkle bursts, tap moon for glow, tap minarets to illuminate
  * FIREWORKS: Golden fireworks celebration when all lanterns are lit
  */
 
@@ -18,6 +18,8 @@ import { ArchFrame } from "@/components/ArchFrame";
 import { ShareButton } from "@/components/ShareButton";
 import { AudioPlayer } from "@/components/AudioPlayer";
 import { Fireworks } from "@/components/Fireworks";
+import { InteractiveMoon } from "@/components/InteractiveMoon";
+import { InteractiveMinarets } from "@/components/InteractiveMinarets";
 
 const HERO_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-hero-bg-9kzzBonp6V77Ew3fAkrPXW.webp";
 
@@ -171,6 +173,12 @@ export default function Home() {
 
           {/* Layer 2: Mosque silhouette at bottom */}
           <MosqueSilhouette />
+
+          {/* Layer 2.5: Interactive crescent moon overlay — tap for glow effect */}
+          <InteractiveMoon />
+
+          {/* Layer 2.6: Interactive minaret hotspots — tap to illuminate */}
+          <InteractiveMinarets />
 
           {/* Layer 3: Bokeh particles */}
           <BokehParticles count={18} />

@@ -25,3 +25,8 @@
 - [x] Replace ambient audio with Eid-flavored instrumental track (Middle Eastern melodic elements)
 - [x] Create Your Own page at /create with form, shareable link, copy button, and QR code
 - [x] Golden fireworks celebration when all 6 lanterns are lit
+- [ ] Verify dynamic OG image working on Render production
+- [x] Make mosque minarets interactive (tappable with visual effects)
+- [x] Make crescent moon interactive (tappable with visual effects)
+- [x] Fix Arabic text overlapping the crescent moon (moved text up with -8vh margin)
+- [x] Optimize mobile viewport and decide on scrolling behavior (no scroll, h-screen overflow-hidden, responsive text)
