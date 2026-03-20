@@ -1,12 +1,14 @@
 /*
  * InteractiveMoon: Tappable crescent moon overlay positioned over the background moon
  * Tap to trigger a radiant glow pulse + sparkle burst effect
- * Uses a transparent SVG crescent shape as the clickable hitbox
+ * Uses viewport-relative units (vh/vw) to align with the background image crescent
+ * Includes haptic feedback on tap
  */
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { tryPlayAudio } from "./audioContext";
+import { triggerHaptic } from "./haptics";
 
 function MoonSparkles() {
   const sparkles = Array.from({ length: 12 }, (_, i) => {
@@ -74,8 +76,10 @@ export function InteractiveMoon() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [sparkleKey, setSparkleKey] = useState(0);
 
-  const handleTap = useCallback(() => {
+  const handleTap = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
     tryPlayAudio();
+    triggerHaptic("medium");
     setIsGlowing((prev) => !prev);
     setShowSparkles(true);
     setSparkleKey((k) => k + 1);
@@ -84,16 +88,24 @@ export function InteractiveMoon() {
 
   return (
     <div
-      className="absolute z-[16] cursor-pointer"
+      className="absolute z-[40] cursor-pointer"
       style={{
-        /* Position over the crescent moon in the background image */
-        bottom: "12%",
+        /*
+         * Position the clickable area over the visible crescent moon in the background.
+         * The background image has the crescent centered horizontally, starting at ~35% from top.
+         * Using viewport-relative units so it scales with the screen.
+         */
+        top: "35vh",
         left: "50%",
-        transform: "translateX(-65%)",
-        width: "min(35vw, 320px)",
+        transform: "translateX(-60%)",
+        width: "min(40vw, 350px)",
         height: "min(50vh, 450px)",
       }}
       onClick={handleTap}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        handleTap(e);
+      }}
       role="button"
       aria-label={
         isGlowing

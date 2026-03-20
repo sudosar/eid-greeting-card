@@ -30,3 +30,11 @@
 - [x] Make crescent moon interactive (tappable with visual effects)
 - [x] Fix Arabic text overlapping the crescent moon (moved text up with -8vh margin)
 - [x] Optimize mobile viewport and decide on scrolling behavior (no scroll, h-screen overflow-hidden, responsive text)
+- [x] Fix OG image not rendering on social media shares (absolute URLs + X-Forwarded-Proto)
+- [x] Fix Arabic text still overlapping the crescent moon (split into 3 zones: top/crescent/bottom)
+- [x] Fix crescent moon not responding to taps (z-40, viewport-relative positioning)
+- [x] Fix minarets not responding to taps (z-40, pointer-events: auto on each minaret)
+- [x] Add haptic feedback to all interactive elements (moon, minarets, lanterns, sky)
+- [x] Test on mobile web viewport (375x812) and verify interactive elements work
+- [x] Redesign text layout: 3-zone split — name above crescent, Arabic above crescent, EID MUBARAK below crescent
+- [x] Set up Render keep-alive mechanism (self-ping /api/health every 10 min via RENDER_EXTERNAL_URL)

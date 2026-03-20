@@ -127,7 +127,9 @@ export async function setupVite(app: Express, server: Server) {
       let page = await vite.transformIndexHtml(url, template);
 
       // Inject dynamic OG tags based on query parameters with absolute origin
-      const origin = `${req.protocol}://${req.get("host")}`;
+      // Use X-Forwarded-Proto for reverse proxy environments (Render, etc.)
+      const proto = req.get("x-forwarded-proto") || req.protocol || "https";
+      const origin = `${proto}://${req.get("host")}`;
       page = injectDynamicOgTags(page, url, origin);
 
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
@@ -155,7 +157,8 @@ export function serveStatic(app: Express) {
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
     let html = fs.readFileSync(indexPath, "utf-8");
-    const origin = `${req.protocol}://${req.get("host")}`;
+    const proto = req.get("x-forwarded-proto") || req.protocol || "https";
+    const origin = `${proto}://${req.get("host")}`;
     html = injectDynamicOgTags(html, req.originalUrl, origin);
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
   });

@@ -1,13 +1,14 @@
 /*
  * InteractiveMinarets: Tappable hotspot overlays positioned over the mosque minarets
  * Tap a minaret to illuminate it with a warm golden glow effect
- * The minarets are part of the background mosque silhouette image,
- * so we overlay transparent clickable regions at the correct positions
+ * Uses viewport-relative positioning to align with the background mosque silhouette
+ * Includes haptic feedback on tap
  */
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { tryPlayAudio } from "./audioContext";
+import { triggerHaptic } from "./haptics";
 
 interface MinaretProps {
   id: string;
@@ -85,15 +86,20 @@ function Minaret({ id, left, width, height }: MinaretProps) {
   const [showSparkle, setShowSparkle] = useState(false);
   const [sparkleKey, setSparkleKey] = useState(0);
 
-  const handleTap = useCallback(() => {
-    tryPlayAudio();
-    setIsLit((prev) => !prev);
-    if (!isLit) {
-      setShowSparkle(true);
-      setSparkleKey((k) => k + 1);
-      setTimeout(() => setShowSparkle(false), 800);
-    }
-  }, [isLit]);
+  const handleTap = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      e.stopPropagation();
+      tryPlayAudio();
+      triggerHaptic("light");
+      setIsLit((prev) => !prev);
+      if (!isLit) {
+        setShowSparkle(true);
+        setSparkleKey((k) => k + 1);
+        setTimeout(() => setShowSparkle(false), 800);
+      }
+    },
+    [isLit]
+  );
 
   return (
     <div
@@ -102,8 +108,13 @@ function Minaret({ id, left, width, height }: MinaretProps) {
         left,
         width,
         height,
+        pointerEvents: "auto",
       }}
       onClick={handleTap}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        handleTap(e);
+      }}
       role="button"
       aria-label={
         isLit
@@ -113,9 +124,7 @@ function Minaret({ id, left, width, height }: MinaretProps) {
       tabIndex={0}
     >
       {/* Illumination glow */}
-      <AnimatePresence>
-        {isLit && <MinaretGlow />}
-      </AnimatePresence>
+      <AnimatePresence>{isLit && <MinaretGlow />}</AnimatePresence>
 
       {/* Sparkle burst on tap */}
       <AnimatePresence>
@@ -127,39 +136,26 @@ function Minaret({ id, left, width, height }: MinaretProps) {
 
 export function InteractiveMinarets() {
   /*
-   * Minaret positions are approximate overlays matching the mosque silhouette.
+   * Minaret positions are viewport-relative overlays matching the mosque silhouette.
    * The mosque image has minarets at roughly these horizontal positions:
-   * - Far left minaret: ~8%
-   * - Left-center minaret: ~28%
-   * - Right-center minaret: ~72%
-   * - Far right minaret: ~88%
+   * - Far left minaret: ~5%
+   * - Left-center minaret: ~22%
+   * - Right-center minaret: ~55%
+   * - Far right minaret: ~90%
+   * Container uses z-40 to sit above the sky layer (z-14) and text layer (z-30)
    */
   return (
-    <div className="absolute bottom-0 left-0 right-0 z-[16] max-h-[25vh] sm:max-h-[35vh] h-[25vh] sm:h-[35vh]">
-      <Minaret
-        id="far-left"
-        left="5%"
-        width="6%"
-        height="80%"
-      />
-      <Minaret
-        id="left-center"
-        left="25%"
-        width="5%"
-        height="65%"
-      />
-      <Minaret
-        id="right-center"
-        left="70%"
-        width="5%"
-        height="65%"
-      />
-      <Minaret
-        id="far-right"
-        left="89%"
-        width="6%"
-        height="80%"
-      />
+    <div
+      className="absolute bottom-0 left-0 right-0 z-[40]"
+      style={{
+        height: "35vh",
+        pointerEvents: "none",
+      }}
+    >
+      <Minaret id="far-left" left="3%" width="8%" height="85%" />
+      <Minaret id="left-center" left="20%" width="7%" height="60%" />
+      <Minaret id="right-center" left="52%" width="7%" height="60%" />
+      <Minaret id="far-right" left="88%" width="8%" height="85%" />
     </div>
   );
 }

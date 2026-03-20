@@ -11,6 +11,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { tryPlayAudio } from "./audioContext";
+import { triggerHaptic } from "./haptics";
 
 const LANTERN_1_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-1-6ZiYH2rjQqBAUDzShcm2rJ.webp";
 const LANTERN_2_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-2-6WSSDv9is6fknfxrZZ2XH3.webp";
@@ -136,6 +137,7 @@ function Lantern({ variant, className = "", size = "w-24", swayClass = "animate-
   const handleTap = useCallback(() => {
     // Always try to play audio on any lantern interaction
     tryPlayAudio();
+    triggerHaptic("sparkle");
 
     if (isLit) {
       // Toggle off

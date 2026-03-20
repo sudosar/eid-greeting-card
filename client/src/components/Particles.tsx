@@ -8,6 +8,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { tryPlayAudio } from "./audioContext";
+import { triggerHaptic } from "./haptics";
 
 interface BokehParticle {
   id: number;
@@ -156,6 +157,7 @@ export function InteractiveSkyLayer() {
   const handleTap = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     // Try to play audio on any sky interaction
     tryPlayAudio();
+    triggerHaptic("light");
 
     // Get tap coordinates relative to the container
     let x: number, y: number;

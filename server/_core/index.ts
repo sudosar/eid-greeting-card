@@ -60,8 +60,36 @@ async function startServer() {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
+  // Simple health-check endpoint for external monitors
+  app.get("/api/health", (_req, res) => {
+    res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
+  });
+
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+
+    // ─── Keep-Alive Self-Ping ───
+    // Render free-tier services sleep after 15 min of inactivity.
+    // This self-ping hits our own health endpoint every 10 min to stay awake.
+    if (process.env.NODE_ENV !== "development") {
+      const RENDER_URL = process.env.RENDER_EXTERNAL_URL; // Render injects this automatically
+      const PING_INTERVAL = 10 * 60 * 1000; // 10 minutes
+
+      if (RENDER_URL) {
+        console.log(`[keep-alive] Self-ping enabled → ${RENDER_URL}/api/health every 10 min`);
+        setInterval(async () => {
+          try {
+            const res = await fetch(`${RENDER_URL}/api/health`);
+            const data = await res.json();
+            console.log(`[keep-alive] Ping OK — uptime: ${Math.round(data.uptime)}s`);
+          } catch (err: any) {
+            console.warn(`[keep-alive] Ping failed:`, err?.message || err);
+          }
+        }, PING_INTERVAL);
+      } else {
+        console.log(`[keep-alive] RENDER_EXTERNAL_URL not set — self-ping disabled`);
+      }
+    }
   });
 }
 

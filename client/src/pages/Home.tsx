@@ -1,18 +1,32 @@
 /*
  * DESIGN: "Lantern Procession" — Atmospheric Depth & Light
  * Home: Full-screen immersive Eid greeting card
- * Layers: Background sky → Stars → Mosque silhouette → Interactive Moon → Interactive Minarets → Bokeh → Interactive Sky → Lanterns → Arch → Text
- * Features: Share button (bottom-right), Audio player (bottom-left)
- * INTERACTIVE: Tap lanterns to light them, tap sky for sparkle bursts, tap moon for glow, tap minarets to illuminate
- * FIREWORKS: Golden fireworks celebration when all lanterns are lit
+ *
+ * TEXT LAYOUT (designed around the background crescent moon):
+ *   TOP ZONE (5-12vh): "Dear Name" + decorative divider — above the crescent
+ *   CRESCENT ZONE (30-48vh): Arabic "عيد مبارك" — inside the crescent's inner curve
+ *   BOTTOM ZONE (68-95vh): "EID MUBARAK" + blessing + prayer — below the crescent
+ *
+ * LAYERS: Background sky → Stars → Mosque → Bokeh → Interactive Sky → Arch → Lanterns → Text zones → Moon/Minarets → UI
+ * INTERACTIVE: Tap lanterns, moon, minarets, sky for visual effects + haptic feedback
+ * FIREWORKS: Golden fireworks when all 6 lanterns are lit
  */
 
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BokehParticles, TwinklingStars, FloatingLightParticles, InteractiveSkyLayer } from "@/components/Particles";
+import {
+  BokehParticles,
+  TwinklingStars,
+  FloatingLightParticles,
+  InteractiveSkyLayer,
+} from "@/components/Particles";
 import { LanternScene, registerAllLitCallback } from "@/components/Lanterns";
-import { GreetingText } from "@/components/GreetingText";
-import { GeometricCorners, TopBorderLine, BottomBorderLine } from "@/components/GeometricBorder";
+import { GreetingTop, GreetingArabic, GreetingBottom } from "@/components/GreetingText";
+import {
+  GeometricCorners,
+  TopBorderLine,
+  BottomBorderLine,
+} from "@/components/GeometricBorder";
 import { MosqueSilhouette } from "@/components/MosqueSilhouette";
 import { ArchFrame } from "@/components/ArchFrame";
 import { ShareButton } from "@/components/ShareButton";
@@ -21,7 +35,8 @@ import { Fireworks } from "@/components/Fireworks";
 import { InteractiveMoon } from "@/components/InteractiveMoon";
 import { InteractiveMinarets } from "@/components/InteractiveMinarets";
 
-const HERO_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-hero-bg-9kzzBonp6V77Ew3fAkrPXW.webp";
+const HERO_BG_URL =
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-hero-bg-9kzzBonp6V77Ew3fAkrPXW.webp";
 
 function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -46,7 +61,8 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
       transition={{ duration: 0.8 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center"
       style={{
-        background: "linear-gradient(180deg, #0C1445 0%, #2D1B69 60%, #4A2040 100%)",
+        background:
+          "linear-gradient(180deg, #0C1445 0%, #2D1B69 60%, #4A2040 100%)",
       }}
     >
       {/* Crescent moon icon */}
@@ -89,12 +105,16 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
       </motion.p>
 
       {/* Progress bar */}
-      <div className="w-48 h-[2px] rounded-full overflow-hidden mt-4" style={{ backgroundColor: "rgba(240, 199, 94, 0.1)" }}>
+      <div
+        className="w-48 h-[2px] rounded-full overflow-hidden mt-4"
+        style={{ backgroundColor: "rgba(240, 199, 94, 0.1)" }}
+      >
         <motion.div
           className="h-full rounded-full"
           style={{
             width: `${progress}%`,
-            background: "linear-gradient(90deg, rgba(240, 199, 94, 0.3), rgba(240, 199, 94, 0.8))",
+            background:
+              "linear-gradient(90deg, rgba(240, 199, 94, 0.3), rgba(240, 199, 94, 0.8))",
           }}
         />
       </div>
@@ -132,13 +152,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden" style={{ background: "#0C1445" }}>
+    <div
+      className="relative w-full h-screen overflow-hidden"
+      style={{ background: "#0C1445" }}
+    >
       <AnimatePresence mode="wait">
         {!showContent && (
-          <LoadingScreen
-            key="loading"
-            onComplete={handleLoadingComplete}
-          />
+          <LoadingScreen key="loading" onComplete={handleLoadingComplete} />
         )}
       </AnimatePresence>
 
@@ -164,7 +184,8 @@ export default function Home() {
           <div
             className="absolute inset-0 z-[1]"
             style={{
-              background: "radial-gradient(ellipse at center 40%, rgba(12, 20, 69, 0.15) 0%, rgba(12, 20, 69, 0.4) 60%, rgba(12, 20, 69, 0.6) 100%)",
+              background:
+                "radial-gradient(ellipse at center 40%, rgba(12, 20, 69, 0.15) 0%, rgba(12, 20, 69, 0.4) 60%, rgba(12, 20, 69, 0.6) 100%)",
             }}
           />
 
@@ -174,19 +195,13 @@ export default function Home() {
           {/* Layer 2: Mosque silhouette at bottom */}
           <MosqueSilhouette />
 
-          {/* Layer 2.5: Interactive crescent moon overlay — tap for glow effect */}
-          <InteractiveMoon />
-
-          {/* Layer 2.6: Interactive minaret hotspots — tap to illuminate */}
-          <InteractiveMinarets />
-
           {/* Layer 3: Bokeh particles */}
           <BokehParticles count={18} />
 
           {/* Layer 4: Floating light particles rising up */}
           <FloatingLightParticles count={10} />
 
-          {/* Layer 4.5: Interactive sky — tap for sparkle bursts (z-14 so lanterns at z-15/z-20 receive clicks) */}
+          {/* Layer 4.5: Interactive sky — tap for sparkle bursts */}
           <InteractiveSkyLayer />
 
           {/* Layer 5: Arch frame overlay */}
@@ -200,25 +215,60 @@ export default function Home() {
           <TopBorderLine />
           <BottomBorderLine />
 
-          {/* Layer 8: Central greeting text — vertically centered */}
-          <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none">
-            <GreetingText />
+          {/* ═══════════════════════════════════════════════════════
+              TEXT ZONES — Three separate zones positioned around the crescent
+              ═══════════════════════════════════════════════════════ */}
+
+          {/* TOP ZONE: "Dear Name" — above the crescent (5-12vh from top) */}
+          <div
+            className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
+            style={{ top: "4vh" }}
+          >
+            <GreetingTop />
+          </div>
+
+          {/* CRESCENT ZONE: Arabic "عيد مبارك" — positioned in the open sky area
+              above the crescent moon body, inside the arch frame's upper area.
+              This creates a natural reading flow: name → Arabic → crescent → English */}
+          <div
+            className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
+            style={{ top: "18vh" }}
+          >
+            <GreetingArabic />
+          </div>
+
+          {/* BOTTOM ZONE: "EID MUBARAK" + blessing + prayer — below the crescent */}
+          <div
+            className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
+            style={{ top: "56vh" }}
+          >
+            <GreetingBottom />
           </div>
 
           {/* Vignette overlay for depth */}
           <div
             className="absolute inset-0 z-[35] pointer-events-none"
             style={{
-              background: "radial-gradient(ellipse at center, transparent 30%, rgba(12, 20, 69, 0.6) 100%)",
+              background:
+                "radial-gradient(ellipse at center, transparent 30%, rgba(12, 20, 69, 0.6) 100%)",
             }}
           />
+
+          {/* Layer 9: Interactive crescent moon overlay — tap for glow effect */}
+          <InteractiveMoon />
+
+          {/* Layer 9.5: Interactive minaret hotspots — tap to illuminate */}
+          <InteractiveMinarets />
 
           {/* UI Controls — above vignette */}
           <AudioPlayer />
           <ShareButton />
 
           {/* Fireworks celebration — triggered when all lanterns are lit */}
-          <Fireworks show={showFireworks} onComplete={handleFireworksComplete} />
+          <Fireworks
+            show={showFireworks}
+            onComplete={handleFireworksComplete}
+          />
         </motion.div>
       )}
     </div>
