@@ -5,23 +5,29 @@
  * English: Cinzel Decorative — ornate capitals echoing architectural inscriptions
  * Body: EB Garamond — warm, classical serif
  *
- * PERSONALIZATION: Reads ?name= from URL to display a personalized greeting
- * e.g. ?name=Ahmed → "Dear Ahmed," / "عزيزي أحمد"
+ * PERSONALIZATION:
+ *   ?name=Ahmed       → "Dear Ahmed," + personalized blessing
+ *   ?msg=From+the+Ali+family → custom message line below the blessing
+ *   Both can be combined: ?name=Ahmed&msg=From+the+Ali+family
  */
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 
-function usePersonName(): string | null {
+function useUrlParams(): { name: string | null; msg: string | null } {
   return useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const name = params.get("name");
-    return name ? decodeURIComponent(name).trim() : null;
+    const msg = params.get("msg");
+    return {
+      name: name ? decodeURIComponent(name).trim() : null,
+      msg: msg ? decodeURIComponent(msg).trim() : null,
+    };
   }, []);
 }
 
 export function GreetingText() {
-  const name = usePersonName();
+  const { name, msg } = useUrlParams();
 
   return (
     <div className="relative z-30 flex flex-col items-center justify-center text-center px-6 py-8">
@@ -111,11 +117,27 @@ export function GreetingText() {
           : "May this blessed occasion bring peace, happiness, and prosperity to you and your loved ones"}
       </motion.p>
 
+      {/* Custom message — only shown when ?msg= is present */}
+      {msg && (
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
+          className="font-body text-sm sm:text-base md:text-lg mt-3 italic max-w-sm"
+          style={{
+            color: "rgba(240, 199, 94, 0.7)",
+            letterSpacing: "0.02em",
+          }}
+        >
+          — {msg}
+        </motion.p>
+      )}
+
       {/* Arabic blessing */}
       <motion.p
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1.9, ease: "easeOut" }}
+        transition={{ duration: 1, delay: msg ? 2.1 : 1.9, ease: "easeOut" }}
         className="font-arabic text-xl sm:text-2xl md:text-3xl mt-3 sm:mt-4"
         style={{
           color: "rgba(240, 199, 94, 0.65)",
@@ -130,7 +152,7 @@ export function GreetingText() {
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ duration: 1.2, delay: 2.2, ease: "easeOut" }}
+        transition={{ duration: 1.2, delay: msg ? 2.4 : 2.2, ease: "easeOut" }}
         className="w-32 sm:w-48 h-[1px] mt-6"
         style={{
           background: "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
@@ -141,7 +163,7 @@ export function GreetingText() {
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 2.5, ease: "easeOut" }}
+        transition={{ duration: 1, delay: msg ? 2.7 : 2.5, ease: "easeOut" }}
         className="font-display text-xs sm:text-sm tracking-[0.3em] uppercase mt-4"
         style={{
           color: "rgba(232, 220, 200, 0.4)",

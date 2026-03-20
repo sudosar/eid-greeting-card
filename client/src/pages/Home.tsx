@@ -2,6 +2,7 @@
  * DESIGN: "Lantern Procession" — Atmospheric Depth & Light
  * Home: Full-screen immersive Eid greeting card
  * Layers: Background sky → Stars → Mosque silhouette → Bokeh → Lanterns → Arch → Text
+ * Features: Share button (bottom-right), Audio player (bottom-left)
  */
 
 import { useEffect, useState, useCallback } from "react";
@@ -12,6 +13,8 @@ import { GreetingText } from "@/components/GreetingText";
 import { GeometricCorners, TopBorderLine, BottomBorderLine } from "@/components/GeometricBorder";
 import { MosqueSilhouette } from "@/components/MosqueSilhouette";
 import { ArchFrame } from "@/components/ArchFrame";
+import { ShareButton } from "@/components/ShareButton";
+import { AudioPlayer } from "@/components/AudioPlayer";
 
 const HERO_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-hero-bg-9kzzBonp6V77Ew3fAkrPXW.webp";
 
@@ -168,6 +171,10 @@ export default function Home() {
               background: "radial-gradient(ellipse at center, transparent 30%, rgba(12, 20, 69, 0.6) 100%)",
             }}
           />
+
+          {/* UI Controls — above vignette */}
+          <AudioPlayer />
+          <ShareButton />
         </motion.div>
       )}
     </div>
