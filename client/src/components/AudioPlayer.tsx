@@ -3,6 +3,7 @@
  * AudioPlayer: Background ambient audio that plays on first user interaction
  * Shows a subtle speaker icon in the bottom-left corner
  * Loops a gentle Eid-themed ambient track
+ * MOBILE: Smaller button, adjusted spacing for small screens
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -76,13 +77,13 @@ export function AudioPlayer() {
   }, [hasInteracted]);
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3">
+    <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex items-center gap-2 sm:gap-3">
       {/* Audio toggle button */}
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={toggleAudio}
-        className="w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-lg"
+        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-lg"
         style={{
           background: isPlaying
             ? "rgba(240, 199, 94, 0.2)"
@@ -102,7 +103,7 @@ export function AudioPlayer() {
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Volume2 size={20} />
+              <Volume2 size={18} className="sm:w-5 sm:h-5" />
             </motion.div>
           ) : (
             <motion.div
@@ -112,7 +113,7 @@ export function AudioPlayer() {
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <VolumeX size={20} />
+              <VolumeX size={18} className="sm:w-5 sm:h-5" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -139,7 +140,7 @@ export function AudioPlayer() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.4 }}
-            className="font-body text-xs sm:text-sm whitespace-nowrap pointer-events-none"
+            className="font-body text-[10px] sm:text-sm whitespace-nowrap pointer-events-none"
             style={{ color: "rgba(240, 199, 94, 0.5)" }}
           >
             Tap for music

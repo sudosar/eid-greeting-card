@@ -3,6 +3,7 @@
  * Lanterns: Ornate Islamic fanous lanterns that sway gently with warm inner glow
  * Uses tight elliptical CSS mask to hide the white/light backgrounds
  * Includes golden chain SVG lines hanging from above
+ * MOBILE: Fewer lanterns on small screens, reduced sizes
  */
 
 const LANTERN_1_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-1-6ZiYH2rjQqBAUDzShcm2rJ.webp";
@@ -86,8 +87,8 @@ export function LanternScene() {
       {/* Left foreground lantern — large, close */}
       <Lantern
         variant={1}
-        size="w-24 sm:w-32 md:w-40"
-        className="absolute top-0 left-[3%] sm:left-[6%] z-20"
+        size="w-16 sm:w-24 md:w-32 lg:w-40"
+        className="absolute top-0 left-[2%] sm:left-[6%] z-20"
         swayClass="animate-lantern-sway"
         style={{ "--sway-duration": "4.5s" } as React.CSSProperties}
       />
@@ -95,45 +96,45 @@ export function LanternScene() {
       {/* Right foreground lantern — large, close */}
       <Lantern
         variant={2}
-        size="w-20 sm:w-28 md:w-36"
-        className="absolute top-0 right-[3%] sm:right-[6%] z-20"
+        size="w-14 sm:w-20 md:w-28 lg:w-36"
+        className="absolute top-0 right-[2%] sm:right-[6%] z-20"
         swayClass="animate-lantern-sway-reverse"
         style={{ "--sway-duration": "3.8s" } as React.CSSProperties}
       />
 
-      {/* Left midground lantern — medium */}
+      {/* Left midground lantern — medium — hidden on very small screens */}
       <Lantern
         variant={2}
-        size="w-14 sm:w-18 md:w-22"
-        className="absolute top-[5%] left-[18%] sm:left-[20%] z-[15] opacity-75"
+        size="w-10 sm:w-14 md:w-18 lg:w-22"
+        className="absolute top-[5%] left-[15%] sm:left-[20%] z-[15] opacity-75 hidden xs:block sm:block"
         swayClass="animate-lantern-sway"
         style={{ "--sway-duration": "5s" } as React.CSSProperties}
       />
 
-      {/* Right midground lantern — medium */}
+      {/* Right midground lantern — medium — hidden on very small screens */}
       <Lantern
         variant={1}
-        size="w-14 sm:w-18 md:w-22"
-        className="absolute top-[3%] right-[16%] sm:right-[18%] z-[15] opacity-75"
+        size="w-10 sm:w-14 md:w-18 lg:w-22"
+        className="absolute top-[3%] right-[13%] sm:right-[18%] z-[15] opacity-75 hidden xs:block sm:block"
         swayClass="animate-lantern-sway-reverse"
         style={{ "--sway-duration": "4.2s" } as React.CSSProperties}
       />
 
-      {/* Center-left background lantern — small, far */}
+      {/* Center-left background lantern — small, far — hidden on mobile */}
       <Lantern
         variant={1}
         size="w-10 sm:w-12 md:w-16"
-        className="absolute top-0 left-[35%] z-[12] opacity-50"
+        className="absolute top-0 left-[35%] z-[12] opacity-50 hidden sm:block"
         swayClass="animate-lantern-sway"
         style={{ "--sway-duration": "5.5s" } as React.CSSProperties}
         showChain={false}
       />
 
-      {/* Center-right background lantern — small, far */}
+      {/* Center-right background lantern — small, far — hidden on mobile */}
       <Lantern
         variant={2}
         size="w-10 sm:w-12 md:w-16"
-        className="absolute top-0 right-[32%] z-[12] opacity-50"
+        className="absolute top-0 right-[32%] z-[12] opacity-50 hidden sm:block"
         swayClass="animate-lantern-sway-reverse"
         style={{ "--sway-duration": "6s" } as React.CSSProperties}
         showChain={false}

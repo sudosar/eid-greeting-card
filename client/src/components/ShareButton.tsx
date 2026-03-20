@@ -3,6 +3,7 @@
  * ShareButton: Floating share menu with WhatsApp share and copy-link
  * Appears as a subtle golden icon in the bottom-right corner
  * Expands on click to reveal share options
+ * MOBILE: Smaller button, adjusted spacing for small screens
  */
 
 import { useState, useCallback } from "react";
@@ -50,7 +51,7 @@ export function ShareButton() {
   }, [currentUrl]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col-reverse items-end gap-3">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col-reverse items-end gap-2 sm:gap-3">
       {/* Share options — shown when open */}
       <AnimatePresence>
         {isOpen && (
@@ -62,7 +63,7 @@ export function ShareButton() {
               exit={{ opacity: 0, scale: 0.5, y: 10 }}
               transition={{ duration: 0.25, delay: 0.05 }}
               onClick={handleWhatsApp}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-full backdrop-blur-md transition-all hover:scale-105"
+              className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full backdrop-blur-md transition-all hover:scale-105"
               style={{
                 background: "rgba(37, 211, 102, 0.2)",
                 border: "1px solid rgba(37, 211, 102, 0.4)",
@@ -70,8 +71,8 @@ export function ShareButton() {
               }}
               title="Share on WhatsApp"
             >
-              <MessageCircle size={18} />
-              <span className="font-body text-sm">WhatsApp</span>
+              <MessageCircle size={16} className="sm:w-[18px] sm:h-[18px]" />
+              <span className="font-body text-xs sm:text-sm">WhatsApp</span>
             </motion.button>
 
             {/* Copy Link */}
@@ -81,7 +82,7 @@ export function ShareButton() {
               exit={{ opacity: 0, scale: 0.5, y: 10 }}
               transition={{ duration: 0.25, delay: 0.1 }}
               onClick={handleCopyLink}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-full backdrop-blur-md transition-all hover:scale-105"
+              className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full backdrop-blur-md transition-all hover:scale-105"
               style={{
                 background: "rgba(240, 199, 94, 0.15)",
                 border: "1px solid rgba(240, 199, 94, 0.35)",
@@ -89,8 +90,8 @@ export function ShareButton() {
               }}
               title="Copy link"
             >
-              {copied ? <Check size={18} /> : <Link size={18} />}
-              <span className="font-body text-sm">{copied ? "Copied!" : "Copy Link"}</span>
+              {copied ? <Check size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Link size={16} className="sm:w-[18px] sm:h-[18px]" />}
+              <span className="font-body text-xs sm:text-sm">{copied ? "Copied!" : "Copy Link"}</span>
             </motion.button>
           </>
         )}
@@ -101,7 +102,7 @@ export function ShareButton() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-lg"
+        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-all shadow-lg"
         style={{
           background: isOpen
             ? "rgba(240, 199, 94, 0.25)"
@@ -121,7 +122,7 @@ export function ShareButton() {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <X size={20} />
+              <X size={18} className="sm:w-5 sm:h-5" />
             </motion.div>
           ) : (
             <motion.div
@@ -131,7 +132,7 @@ export function ShareButton() {
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Share2 size={20} />
+              <Share2 size={18} className="sm:w-5 sm:h-5" />
             </motion.div>
           )}
         </AnimatePresence>

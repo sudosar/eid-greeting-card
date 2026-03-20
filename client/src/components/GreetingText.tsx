@@ -9,6 +9,8 @@
  *   ?name=Ahmed       → "Dear Ahmed," + personalized blessing
  *   ?msg=From+the+Ali+family → custom message line below the blessing
  *   Both can be combined: ?name=Ahmed&msg=From+the+Ali+family
+ *
+ * MOBILE: Optimized text sizes and spacing for small screens (320px+)
  */
 
 import { useMemo } from "react";
@@ -30,13 +32,13 @@ export function GreetingText() {
   const { name, msg } = useUrlParams();
 
   return (
-    <div className="relative z-30 flex flex-col items-center justify-center text-center px-6 py-8">
+    <div className="relative z-30 flex flex-col items-center justify-center text-center px-4 sm:px-6 py-4 sm:py-8 max-w-full overflow-hidden">
       {/* Decorative top divider */}
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-        className="w-32 sm:w-48 h-[1px] mb-6"
+        className="w-24 sm:w-32 md:w-48 h-[1px] mb-3 sm:mb-6"
         style={{
           background: "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
         }}
@@ -48,7 +50,7 @@ export function GreetingText() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-          className="font-body text-lg sm:text-xl md:text-2xl mb-2 sm:mb-3"
+          className="font-body text-base sm:text-xl md:text-2xl mb-1 sm:mb-3"
           style={{
             color: "rgba(232, 220, 200, 0.85)",
             letterSpacing: "0.04em",
@@ -63,7 +65,7 @@ export function GreetingText() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-        className="font-arabic text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-text-glow leading-relaxed"
+        className="font-arabic text-4xl sm:text-5xl md:text-7xl lg:text-8xl animate-text-glow leading-relaxed"
         style={{
           color: "#F0C75E",
           direction: "rtl",
@@ -78,9 +80,9 @@ export function GreetingText() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, delay: 1.4, ease: "easeOut" }}
-        className="my-3 sm:my-4"
+        className="my-2 sm:my-4"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="animate-gentle-float">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="animate-gentle-float sm:w-6 sm:h-6">
           <path
             d="M12 2L14.09 8.26L20.18 8.26L15.18 12.14L17.27 18.4L12 14.74L6.73 18.4L8.82 12.14L3.82 8.26L9.91 8.26L12 2Z"
             fill="rgba(240, 199, 94, 0.7)"
@@ -93,7 +95,7 @@ export function GreetingText() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
-        className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[0.15em] uppercase"
+        className="font-display text-xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[0.1em] sm:tracking-[0.15em] uppercase"
         style={{
           color: "#E8DCC8",
           textShadow: "0 0 20px rgba(240, 199, 94, 0.2)",
@@ -107,7 +109,7 @@ export function GreetingText() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 1.6, ease: "easeOut" }}
-        className="font-body text-base sm:text-lg md:text-xl mt-4 sm:mt-6 max-w-md leading-relaxed"
+        className="font-body text-sm sm:text-lg md:text-xl mt-3 sm:mt-6 max-w-[85vw] sm:max-w-md leading-relaxed px-2"
         style={{
           color: "rgba(232, 220, 200, 0.75)",
         }}
@@ -123,7 +125,7 @@ export function GreetingText() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
-          className="font-body text-sm sm:text-base md:text-lg mt-3 italic max-w-sm"
+          className="font-body text-xs sm:text-base md:text-lg mt-2 sm:mt-3 italic max-w-[80vw] sm:max-w-sm"
           style={{
             color: "rgba(240, 199, 94, 0.7)",
             letterSpacing: "0.02em",
@@ -138,7 +140,7 @@ export function GreetingText() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: msg ? 2.1 : 1.9, ease: "easeOut" }}
-        className="font-arabic text-xl sm:text-2xl md:text-3xl mt-3 sm:mt-4"
+        className="font-arabic text-lg sm:text-2xl md:text-3xl mt-2 sm:mt-4"
         style={{
           color: "rgba(240, 199, 94, 0.65)",
           direction: "rtl",
@@ -153,7 +155,7 @@ export function GreetingText() {
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay: msg ? 2.4 : 2.2, ease: "easeOut" }}
-        className="w-32 sm:w-48 h-[1px] mt-6"
+        className="w-24 sm:w-32 md:w-48 h-[1px] mt-3 sm:mt-6"
         style={{
           background: "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
         }}
@@ -164,7 +166,7 @@ export function GreetingText() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: msg ? 2.7 : 2.5, ease: "easeOut" }}
-        className="font-display text-xs sm:text-sm tracking-[0.3em] uppercase mt-4"
+        className="font-display text-[10px] sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-3 sm:mt-4"
         style={{
           color: "rgba(232, 220, 200, 0.4)",
         }}
