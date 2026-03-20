@@ -152,8 +152,12 @@ function vitePluginManusDebugCollector(): Plugin {
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
 
+// Use /eid-greeting-card/ base for GitHub Pages, / for other deployments
+const base = process.env.GITHUB_PAGES === 'true' ? '/eid-greeting-card/' : '/';
+
 export default defineConfig({
   plugins,
+  base,
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),

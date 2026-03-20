@@ -16,3 +16,5 @@
 - [x] Dynamic OG image generation with personalized name
 - [x] Mobile responsiveness optimization
 - [x] Push code to GitHub repository
+- [x] Fix 404 error when accessing GitHub Pages URL (GitHub Pages incompatible with full-stack app)
+- [x] Deploy to Render web service
