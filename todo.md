@@ -23,3 +23,5 @@
 - [x] Interactive environment elements (tap stars, sparkle bursts, etc.)
 - [x] Fix audio not auto-playing on first environment interaction
 - [x] Replace ambient audio with Eid-flavored instrumental track (Middle Eastern melodic elements)
+- [x] Create Your Own page at /create with form, shareable link, copy button, and QR code
+- [x] Golden fireworks celebration when all 6 lanterns are lit

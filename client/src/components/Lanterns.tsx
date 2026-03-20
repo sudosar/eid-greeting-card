@@ -2,17 +2,33 @@
  * DESIGN: "Lantern Procession" — Atmospheric Depth & Light
  * Lanterns: Ornate Islamic fanous lanterns that sway gently with warm inner glow
  * INTERACTIVE: Lanterns start dim. Tap/click to light them up with a burst of warmth!
+ * FIREWORKS: When all visible lanterns are lit, triggers onAllLit callback
  * Uses tight elliptical CSS mask to hide the white/light backgrounds
  * Includes golden chain SVG lines hanging from above
  * MOBILE: Fewer lanterns on small screens, reduced sizes
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { tryPlayAudio } from "./audioContext";
 
 const LANTERN_1_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-1-6ZiYH2rjQqBAUDzShcm2rJ.webp";
 const LANTERN_2_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-2-6WSSDv9is6fknfxrZZ2XH3.webp";
+
+// Global lantern state tracker
+const lanternStates: Record<string, boolean> = {};
+let onAllLitCallback: (() => void) | null = null;
+
+function checkAllLit() {
+  const ids = Object.keys(lanternStates);
+  if (ids.length > 0 && ids.every((id) => lanternStates[id])) {
+    onAllLitCallback?.();
+  }
+}
+
+export function registerAllLitCallback(cb: () => void) {
+  onAllLitCallback = cb;
+}
 
 interface LanternProps {
   variant: 1 | 2;
@@ -104,6 +120,18 @@ function Lantern({ variant, className = "", size = "w-24", swayClass = "animate-
   const flickerDuration = `${1 + Math.random() * 1.5}s`;
   const [isLit, setIsLit] = useState(false);
   const [showBurst, setShowBurst] = useState(false);
+  const registeredRef = useRef(false);
+
+  // Register this lantern in the global tracker
+  useEffect(() => {
+    if (!registeredRef.current) {
+      lanternStates[id] = false;
+      registeredRef.current = true;
+    }
+    return () => {
+      delete lanternStates[id];
+    };
+  }, [id]);
 
   const handleTap = useCallback(() => {
     // Always try to play audio on any lantern interaction
@@ -112,13 +140,17 @@ function Lantern({ variant, className = "", size = "w-24", swayClass = "animate-
     if (isLit) {
       // Toggle off
       setIsLit(false);
+      lanternStates[id] = false;
     } else {
       // Light up with burst effect
       setIsLit(true);
       setShowBurst(true);
+      lanternStates[id] = true;
       setTimeout(() => setShowBurst(false), 800);
+      // Check if all lanterns are now lit
+      setTimeout(() => checkAllLit(), 100);
     }
-  }, [isLit]);
+  }, [isLit, id]);
 
   return (
     <div

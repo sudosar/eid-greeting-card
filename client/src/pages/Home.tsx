@@ -4,18 +4,20 @@
  * Layers: Background sky → Stars → Mosque silhouette → Bokeh → Interactive Sky → Lanterns → Arch → Text
  * Features: Share button (bottom-right), Audio player (bottom-left)
  * INTERACTIVE: Tap lanterns to light them, tap sky for sparkle bursts, audio auto-plays on first tap
+ * FIREWORKS: Golden fireworks celebration when all lanterns are lit
  */
 
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BokehParticles, TwinklingStars, FloatingLightParticles, InteractiveSkyLayer } from "@/components/Particles";
-import { LanternScene } from "@/components/Lanterns";
+import { LanternScene, registerAllLitCallback } from "@/components/Lanterns";
 import { GreetingText } from "@/components/GreetingText";
 import { GeometricCorners, TopBorderLine, BottomBorderLine } from "@/components/GeometricBorder";
 import { MosqueSilhouette } from "@/components/MosqueSilhouette";
 import { ArchFrame } from "@/components/ArchFrame";
 import { ShareButton } from "@/components/ShareButton";
 import { AudioPlayer } from "@/components/AudioPlayer";
+import { Fireworks } from "@/components/Fireworks";
 
 const HERO_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-hero-bg-9kzzBonp6V77Ew3fAkrPXW.webp";
 
@@ -100,6 +102,8 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 
 export default function Home() {
   const [showContent, setShowContent] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
+  const [fireworksTriggered, setFireworksTriggered] = useState(false);
 
   // Preload the hero background image
   useEffect(() => {
@@ -107,8 +111,22 @@ export default function Home() {
     img.src = HERO_BG_URL;
   }, []);
 
+  // Register the all-lanterns-lit callback
+  useEffect(() => {
+    registerAllLitCallback(() => {
+      if (!fireworksTriggered) {
+        setFireworksTriggered(true);
+        setShowFireworks(true);
+      }
+    });
+  }, [fireworksTriggered]);
+
   const handleLoadingComplete = useCallback(() => {
     setShowContent(true);
+  }, []);
+
+  const handleFireworksComplete = useCallback(() => {
+    setShowFireworks(false);
   }, []);
 
   return (
@@ -190,6 +208,9 @@ export default function Home() {
           {/* UI Controls — above vignette */}
           <AudioPlayer />
           <ShareButton />
+
+          {/* Fireworks celebration — triggered when all lanterns are lit */}
+          <Fireworks show={showFireworks} onComplete={handleFireworksComplete} />
         </motion.div>
       )}
     </div>
