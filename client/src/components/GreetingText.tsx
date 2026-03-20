@@ -3,9 +3,9 @@
  * GreetingText: Split-layout bilingual Eid Mubarak greeting
  *
  * LAYOUT (designed around the background crescent moon):
- *   TOP ZONE (above crescent, ~0-15vh): Personalized "Dear Name" + decorative divider
- *   CRESCENT ZONE (~35-55vh): Arabic "عيد مبارك" — nestled inside the crescent's inner curve
- *   BOTTOM ZONE (below crescent, ~68-95vh): "EID MUBARAK" + blessing + Arabic prayer + year
+ *   TOP ZONE (above crescent): Personalized "Dear Name" + decorative divider
+ *   CRESCENT ZONE (inside moon curve): Arabic "عيد مبارك"
+ *   BOTTOM ZONE (below crescent): "EID MUBARAK" + blessing + Arabic prayer + year
  *
  * PERSONALIZATION:
  *   ?name=Ahmed       → "Dear Ahmed," in the top zone
@@ -40,20 +40,20 @@ export function GreetingTop() {
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
-        className="w-20 sm:w-28 md:w-40 h-[1px] mb-2 sm:mb-3"
+        className="w-20 sm:w-28 md:w-40 h-[1px] mb-2"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
         }}
       />
 
-      {/* Personalized "Dear Name" line */}
+      {/* Personalized "Dear Name" line — increased font size */}
       {name && (
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-          className="font-body text-lg sm:text-xl md:text-2xl"
+          className="font-body text-xl sm:text-2xl md:text-3xl"
           style={{
             color: "rgba(232, 220, 200, 0.85)",
             letterSpacing: "0.04em",
@@ -99,7 +99,7 @@ export function GreetingArabic() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-        className="font-arabic text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-text-glow leading-tight"
+        className="font-arabic text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-text-glow leading-none"
         style={{
           color: "#F0C75E",
           direction: "rtl",
@@ -120,7 +120,7 @@ export function GreetingBottom() {
 
   return (
     <div
-      className="flex flex-col items-center text-center px-6 sm:px-10 py-3 sm:py-4 rounded-2xl max-w-[90vw] sm:max-w-lg pointer-events-none"
+      className="flex flex-col items-center text-center px-6 sm:px-10 py-2 rounded-2xl max-w-[90vw] sm:max-w-lg pointer-events-none"
       style={{
         background:
           "radial-gradient(ellipse at center, rgba(12, 20, 69, 0.8) 0%, rgba(12, 20, 69, 0.5) 50%, transparent 85%)",
@@ -131,14 +131,14 @@ export function GreetingBottom() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-        className="mb-1"
+        className="mb-0.5"
       >
         <svg
-          width="16"
-          height="16"
+          width="14"
+          height="14"
           viewBox="0 0 24 24"
           fill="none"
-          className="animate-gentle-float sm:w-5 sm:h-5"
+          className="animate-gentle-float sm:w-4 sm:h-4"
         >
           <path
             d="M12 2L14.09 8.26L20.18 8.26L15.18 12.14L17.27 18.4L12 14.74L6.73 18.4L8.82 12.14L3.82 8.26L9.91 8.26L12 2Z"
@@ -147,12 +147,12 @@ export function GreetingBottom() {
         </svg>
       </motion.div>
 
-      {/* English greeting */}
+      {/* English greeting — increased font size by 1 step */}
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 1.3, ease: "easeOut" }}
-        className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl tracking-[0.1em] sm:tracking-[0.15em] uppercase"
+        className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-[0.1em] sm:tracking-[0.15em] uppercase"
         style={{
           color: "#E8DCC8",
           textShadow:
@@ -162,12 +162,12 @@ export function GreetingBottom() {
         Eid Mubarak
       </motion.h2>
 
-      {/* Subtitle / blessing */}
+      {/* Subtitle / blessing — increased font size by 1 step */}
       <motion.p
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 1.6, ease: "easeOut" }}
-        className="font-body text-sm sm:text-base md:text-lg mt-1.5 sm:mt-2 max-w-[85vw] sm:max-w-md leading-relaxed"
+        className="font-body text-base sm:text-lg md:text-xl mt-1 max-w-[85vw] sm:max-w-md leading-relaxed"
         style={{
           color: "rgba(232, 220, 200, 0.75)",
           textShadow: "0 1px 8px rgba(12, 20, 69, 0.8)",
@@ -184,7 +184,7 @@ export function GreetingBottom() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
-          className="font-body text-sm sm:text-base md:text-lg mt-1.5 sm:mt-2 italic max-w-[80vw] sm:max-w-sm"
+          className="font-body text-base sm:text-lg md:text-xl mt-1 italic max-w-[80vw] sm:max-w-sm"
           style={{
             color: "rgba(240, 199, 94, 0.7)",
             letterSpacing: "0.02em",
@@ -194,12 +194,12 @@ export function GreetingBottom() {
         </motion.p>
       )}
 
-      {/* Arabic blessing */}
+      {/* Arabic blessing — increased font size by 1 step */}
       <motion.p
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: msg ? 2.1 : 1.9, ease: "easeOut" }}
-        className="font-arabic text-base sm:text-xl md:text-2xl mt-1 sm:mt-2"
+        className="font-arabic text-lg sm:text-2xl md:text-3xl mt-1"
         style={{
           color: "rgba(240, 199, 94, 0.65)",
           direction: "rtl",
@@ -214,7 +214,7 @@ export function GreetingBottom() {
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay: msg ? 2.4 : 2.2, ease: "easeOut" }}
-        className="w-20 sm:w-28 md:w-40 h-[1px] mt-2 sm:mt-3"
+        className="w-20 sm:w-28 md:w-40 h-[1px] mt-1.5"
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(240, 199, 94, 0.6), transparent)",
@@ -226,7 +226,7 @@ export function GreetingBottom() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: msg ? 2.7 : 2.5, ease: "easeOut" }}
-        className="font-display text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-1"
+        className="font-display text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-0.5"
         style={{
           color: "rgba(232, 220, 200, 0.4)",
         }}

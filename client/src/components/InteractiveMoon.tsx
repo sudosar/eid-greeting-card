@@ -1,7 +1,7 @@
 /*
  * InteractiveMoon: Tappable crescent moon overlay positioned over the background moon
  * Tap to trigger a radiant glow pulse + sparkle burst effect
- * Uses viewport-relative units (vh/vw) to align with the background image crescent
+ * Uses onPointerDown for reliable mobile + desktop touch handling
  * Includes haptic feedback on tap
  */
 
@@ -76,36 +76,38 @@ export function InteractiveMoon() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [sparkleKey, setSparkleKey] = useState(0);
 
-  const handleTap = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    e.stopPropagation();
-    tryPlayAudio();
-    triggerHaptic("medium");
-    setIsGlowing((prev) => !prev);
-    setShowSparkles(true);
-    setSparkleKey((k) => k + 1);
-    setTimeout(() => setShowSparkles(false), 1000);
-  }, []);
+  const handleTap = useCallback(
+    (e: React.PointerEvent) => {
+      e.stopPropagation();
+      tryPlayAudio();
+      triggerHaptic("medium");
+      setIsGlowing((prev) => !prev);
+      setShowSparkles(true);
+      setSparkleKey((k) => k + 1);
+      setTimeout(() => setShowSparkles(false), 1000);
+    },
+    []
+  );
 
   return (
     <div
-      className="absolute z-[40] cursor-pointer"
+      className="absolute z-[40]"
       style={{
         /*
          * Position the clickable area over the visible crescent moon in the background.
-         * The background image has the crescent centered horizontally, starting at ~35% from top.
-         * Using viewport-relative units so it scales with the screen.
+         * The crescent in the background image is centered horizontally.
+         * On mobile (portrait), the crescent center is around 40-50vh.
+         * Using a large touch target for easy tapping.
          */
-        top: "35vh",
+        top: "28vh",
         left: "50%",
         transform: "translateX(-60%)",
-        width: "min(40vw, 350px)",
-        height: "min(50vh, 450px)",
+        width: "min(45vw, 380px)",
+        height: "min(45vh, 420px)",
+        touchAction: "none",
+        cursor: "pointer",
       }}
-      onClick={handleTap}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        handleTap(e);
-      }}
+      onPointerDown={handleTap}
       role="button"
       aria-label={
         isGlowing

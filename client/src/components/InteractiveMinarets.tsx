@@ -1,7 +1,7 @@
 /*
  * InteractiveMinarets: Tappable hotspot overlays positioned over the mosque minarets
  * Tap a minaret to illuminate it with a warm golden glow effect
- * Uses viewport-relative positioning to align with the background mosque silhouette
+ * Uses onPointerDown for reliable mobile + desktop touch handling
  * Includes haptic feedback on tap
  */
 
@@ -87,7 +87,7 @@ function Minaret({ id, left, width, height }: MinaretProps) {
   const [sparkleKey, setSparkleKey] = useState(0);
 
   const handleTap = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
+    (e: React.PointerEvent) => {
       e.stopPropagation();
       tryPlayAudio();
       triggerHaptic("light");
@@ -103,18 +103,16 @@ function Minaret({ id, left, width, height }: MinaretProps) {
 
   return (
     <div
-      className="absolute bottom-0 cursor-pointer"
+      className="absolute bottom-0"
       style={{
         left,
         width,
         height,
         pointerEvents: "auto",
+        touchAction: "none",
+        cursor: "pointer",
       }}
-      onClick={handleTap}
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        handleTap(e);
-      }}
+      onPointerDown={handleTap}
       role="button"
       aria-label={
         isLit
@@ -148,7 +146,7 @@ export function InteractiveMinarets() {
     <div
       className="absolute bottom-0 left-0 right-0 z-[40]"
       style={{
-        height: "35vh",
+        height: "30vh",
         pointerEvents: "none",
       }}
     >

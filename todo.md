@@ -38,3 +38,13 @@
 - [x] Test on mobile web viewport (375x812) and verify interactive elements work
 - [x] Redesign text layout: 3-zone split — name above crescent, Arabic above crescent, EID MUBARAK below crescent
 - [x] Set up Render keep-alive mechanism (self-ping /api/health every 10 min via RENDER_EXTERNAL_URL)
+- [x] Fix Arabic text still overlapping crescent on mobile (moved to 43vh inside crescent curve)
+- [x] Reduce too much gap between text zones (tightened spacing)
+- [x] Increase English text font size by a point (all text bumped up 1 step)
+- [x] Fix interactive moon/minarets not working on mobile touch (switched to onPointerDown + touchAction:none)
+- [x] Move Arabic text INSIDE the crescent moon's inner curve (positioned at 43vh)
+- [x] Reduce gaps between text zones (bottom zone at 62vh)
+- [x] Increase English font sizes by a point (Dear Name: xl→2xl, EID MUBARAK: 2xl→3xl, blessing: base→lg)
+- [x] Fix interactive moon/minarets touch on mobile (onPointerDown replaces onClick/onTouchEnd)
+- [x] Fix OG image not rendering in WhatsApp/Messenger (express.static index:false fix)
+- [x] Add subtle create-your-own button/icon at the bottom (pill button with + icon)

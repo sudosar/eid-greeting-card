@@ -3,9 +3,9 @@
  * Home: Full-screen immersive Eid greeting card
  *
  * TEXT LAYOUT (designed around the background crescent moon):
- *   TOP ZONE (5-12vh): "Dear Name" + decorative divider — above the crescent
- *   CRESCENT ZONE (30-48vh): Arabic "عيد مبارك" — inside the crescent's inner curve
- *   BOTTOM ZONE (68-95vh): "EID MUBARAK" + blessing + prayer — below the crescent
+ *   TOP ZONE (4-10vh): "Dear Name" + decorative divider — above the crescent
+ *   CRESCENT ZONE (~38vh): Arabic "عيد مبارك" — INSIDE the crescent's inner curve
+ *   BOTTOM ZONE (~63vh): "EID MUBARAK" + blessing + prayer — below the crescent
  *
  * LAYERS: Background sky → Stars → Mosque → Bokeh → Interactive Sky → Arch → Lanterns → Text zones → Moon/Minarets → UI
  * INTERACTIVE: Tap lanterns, moon, minarets, sky for visual effects + haptic feedback
@@ -219,28 +219,29 @@ export default function Home() {
               TEXT ZONES — Three separate zones positioned around the crescent
               ═══════════════════════════════════════════════════════ */}
 
-          {/* TOP ZONE: "Dear Name" — above the crescent (5-12vh from top) */}
+          {/* TOP ZONE: "Dear Name" — above the crescent (5vh from top) */}
           <div
             className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
-            style={{ top: "4vh" }}
+            style={{ top: "5vh" }}
           >
             <GreetingTop />
           </div>
 
-          {/* CRESCENT ZONE: Arabic "عيد مبارك" — positioned in the open sky area
-              above the crescent moon body, inside the arch frame's upper area.
-              This creates a natural reading flow: name → Arabic → crescent → English */}
+          {/* CRESCENT ZONE: Arabic "عيد مبارك" — INSIDE the crescent's inner curve.
+              On mobile, the crescent inner curve center is around 42-45vh.
+              Positioning at 43vh places the Arabic text right inside the empty space. */}
           <div
             className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
-            style={{ top: "18vh" }}
+            style={{ top: "43vh" }}
           >
             <GreetingArabic />
           </div>
 
-          {/* BOTTOM ZONE: "EID MUBARAK" + blessing + prayer — below the crescent */}
+          {/* BOTTOM ZONE: "EID MUBARAK" + blessing + prayer — below the crescent.
+              Tightened to 62vh to reduce gap from Arabic text. */}
           <div
             className="absolute left-0 right-0 z-30 flex justify-center pointer-events-none"
-            style={{ top: "56vh" }}
+            style={{ top: "62vh" }}
           >
             <GreetingBottom />
           </div>
@@ -263,6 +264,30 @@ export default function Home() {
           {/* UI Controls — above vignette */}
           <AudioPlayer />
           <ShareButton />
+
+          {/* Subtle "Create Your Own" link at bottom center */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3, duration: 1 }}
+            className="absolute bottom-3 left-1/2 -translate-x-1/2 z-50"
+          >
+            <a
+              href="/create"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body text-[10px] sm:text-xs tracking-wide transition-all duration-300 hover:scale-105"
+              style={{
+                color: "rgba(240, 199, 94, 0.6)",
+                background: "rgba(12, 20, 69, 0.5)",
+                border: "1px solid rgba(240, 199, 94, 0.15)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Create Your Own
+            </a>
+          </motion.div>
 
           {/* Fireworks celebration — triggered when all lanterns are lit */}
           <Fireworks

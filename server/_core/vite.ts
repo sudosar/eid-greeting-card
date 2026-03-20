@@ -151,9 +151,11 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve static assets but skip index.html — we need to process it
+  // through injectDynamicOgTags for every request to inject personalized OG tags
+  app.use(express.static(distPath, { index: false }));
 
-  // fall through to index.html if the file doesn't exist — with dynamic OG injection
+  // ALL HTML page requests go through here for dynamic OG injection
   app.use("*", (req, res) => {
     const indexPath = path.resolve(distPath, "index.html");
     let html = fs.readFileSync(indexPath, "utf-8");
