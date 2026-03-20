@@ -9,6 +9,7 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { tryPlayAudio } from "./audioContext";
 
 const LANTERN_1_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-1-6ZiYH2rjQqBAUDzShcm2rJ.webp";
 const LANTERN_2_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663317811558/RG5FZYdGoAj4xjeFM8ak6S/eid-lantern-2-6WSSDv9is6fknfxrZZ2XH3.webp";
@@ -105,6 +106,9 @@ function Lantern({ variant, className = "", size = "w-24", swayClass = "animate-
   const [showBurst, setShowBurst] = useState(false);
 
   const handleTap = useCallback(() => {
+    // Always try to play audio on any lantern interaction
+    tryPlayAudio();
+
     if (isLit) {
       // Toggle off
       setIsLit(false);

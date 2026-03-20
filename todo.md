@@ -21,3 +21,4 @@
 - [x] Auto-play audio on first user interaction (tap anywhere)
 - [x] Tappable lanterns that light up/glow when clicked
 - [x] Interactive environment elements (tap stars, sparkle bursts, etc.)
+- [x] Fix audio not auto-playing on first environment interaction
